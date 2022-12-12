@@ -1,7 +1,7 @@
-from mcstatus import JavaServer
+from modules.medal import MedalCabinet
 
-server = JavaServer.lookup("mcac.cc")
-status = server.status()
-msg = f"服务器在线人数: {status.players.online}, ping: {status.latency}"
+medal = MedalCabinet()
 
+medals = await medal.get_user_medals("zhou_zhou")
+msg = ','.join(medals)
 print(msg)

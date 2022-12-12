@@ -13,7 +13,11 @@ from qqbot.model.message import MessageEmbed, MessageEmbedField, MessageEmbedThu
 
 from mcstatus import JavaServer
 
+from modules.medal import MedalCabinet
+
 test_config = YamlUtil.read(os.path.join(os.path.dirname(__file__), "config.yaml"))
+# modules start
+medal = MedalCabinet()
 
 
 async def _message_handler(event, message: qqbot.Message):
@@ -36,6 +40,17 @@ async def _message_handler(event, message: qqbot.Message):
 
     if "/ping" in content:
         msg = await get_mc_status()
+        message_to_send = qqbot.MessageSendRequest(content=msg, msg_id=message.id)
+        await msg_api.post_message(message.channel_id, message_to_send)
+
+    if "/medal" in content:
+        # split = content.split("/medal ")
+        # player_name = split[1]
+        medals = await medal.get_user_medals(message.member.nick)
+        msg = ','.join(medals)
+        print(msg)
+        if msg == "":
+            msg = f"玩家{message.member.nick}无勋章"
         message_to_send = qqbot.MessageSendRequest(content=msg, msg_id=message.id)
         await msg_api.post_message(message.channel_id, message_to_send)
 
@@ -128,4 +143,3 @@ if __name__ == "__main__":
         qqbot.HandlerType.AT_MESSAGE_EVENT_HANDLER, _message_handler
     )
     qqbot.async_listen_events(t_token, False, qqbot_handler)
-    send_weather_message_by_time()
