@@ -1,0 +1,9 @@
+token:
+  appid: ""
+  token: ""
+mysql:
+  medal:
+    host: ""
+    database: ""
+    user: ""
+    password: ""
